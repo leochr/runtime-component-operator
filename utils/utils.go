@@ -51,6 +51,9 @@ func CustomizeDeployment(deploy *appsv1.Deployment, ba common.BaseComponent) {
 	if dp != nil && dp.GetDeploymentUpdateStrategy() != nil {
 		deploy.Spec.Strategy = *dp.GetDeploymentUpdateStrategy()
 	}
+	if dp != nil && dp.GetAnnotations() != nil {
+		deploy.Annotations = MergeMaps(deploy.Annotations, dp.GetAnnotations())
+	}
 
 }
 
@@ -360,7 +363,12 @@ func CustomizeAffinity(affinity *corev1.Affinity, ba common.BaseComponent) {
 func CustomizePodSpec(pts *corev1.PodTemplateSpec, ba common.BaseComponent) {
 	obj := ba.(metav1.Object)
 	pts.Labels = ba.GetLabels()
+
 	pts.Annotations = MergeMaps(pts.Annotations, ba.GetAnnotations())
+	dp := ba.GetDeployment()
+	if dp != nil && dp.GetAnnotations() != nil {
+		pts.Annotations = MergeMaps(pts.Annotations, dp.GetAnnotations())
+	}
 
 	var appContainer corev1.Container
 	if len(pts.Spec.Containers) == 0 {

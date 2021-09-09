@@ -681,6 +681,10 @@ spec:
               deployment:
                 description: RuntimeComponentDeployment settings
                 properties:
+                  annotations:
+                    additionalProperties:
+                      type: string
+                    type: object
                   updateStrategy:
                     description: DeploymentStrategy describes how to replace existing
                       pods with new ones.

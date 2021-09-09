@@ -126,6 +126,7 @@ type RuntimeComponentService struct {
 // RuntimeComponentDeployment settings
 type RuntimeComponentDeployment struct {
 	UpdateStrategy *appsv1.DeploymentStrategy `json:"updateStrategy,omitempty"`
+	Annotations    map[string]string          `json:"annotations,omitempty"`
 }
 
 // RuntimeComponentStatefulSet settings
@@ -429,6 +430,11 @@ func (cr *RuntimeComponent) GetDeployment() common.BaseComponentDeployment {
 // GetDeploymentStrategy returns deployment strategy struct
 func (cr *RuntimeComponentDeployment) GetDeploymentUpdateStrategy() *appsv1.DeploymentStrategy {
 	return cr.UpdateStrategy
+}
+
+// GetAnnotations returns annotations to be added only to the Deployment and its child resources
+func (rcd *RuntimeComponentDeployment) GetAnnotations() map[string]string {
+	return rcd.Annotations
 }
 
 // GetStatefulSet returns statefulSet settings

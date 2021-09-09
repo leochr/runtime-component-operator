@@ -159,6 +159,7 @@ type BaseComponentAffinity interface {
 // BaseComponentDeployment describes deployment
 type BaseComponentDeployment interface {
 	GetDeploymentUpdateStrategy() *appsv1.DeploymentStrategy
+	GetAnnotations() map[string]string
 }
 
 // BaseComponentStatefulSet describes deployment
