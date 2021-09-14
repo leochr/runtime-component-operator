@@ -543,7 +543,7 @@ func (pv *RuntimeComponentPersistentVolumeClaim) GetPersistentVolumeClaimSpec() 
 	return pv.Spec
 }
 
-// GetPersistentStatus returns a template representing requested persistent volume
+// GetPersistentStatus returns the status of persistent volume
 func (pv *RuntimeComponentPersistentVolumeClaim) GetPersistentStatus() *corev1.PersistentVolumeClaimStatus {
 	return pv.Status
 }
