@@ -6,7 +6,7 @@ VERSION ?= 1.0.0
 OPERATOR_IMAGE ?= applicationstacks/operator
 OPERATOR_IMAGE_TAG ?= daily
 
-# Default bundle image tag
+# Default bundle image tags
 BUNDLE_IMG ?= applicationstacks/operator:bundle-daily
 # Options for 'bundle-build'
 ifneq ($(origin CHANNELS), undefined)
