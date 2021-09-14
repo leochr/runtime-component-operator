@@ -43,7 +43,7 @@ var (
 	serviceAccountName = "service-account"
 	serviceType        = corev1.ServiceTypeClusterIP
 	service            = &appstacksv1beta1.RuntimeComponentService{Type: &serviceType, Port: 8443}
-	volumeCT           = &corev1.PersistentVolumeClaim{
+	volumeCT           = &appstacksv1beta1.RuntimeComponentPersistentVolumeClaim{
 		ObjectMeta: metav1.ObjectMeta{Name: "pvc", Namespace: namespace},
 		TypeMeta:   metav1.TypeMeta{Kind: "StatefulSet"}}
 	storage        = appstacksv1beta1.RuntimeComponentStorage{Size: "10Mi", MountPath: "/mnt/data", VolumeClaimTemplate: volumeCT}
@@ -67,7 +67,7 @@ var (
 		},
 	}
 	volume      = corev1.Volume{Name: "runtime-volume"}
-	volumeMount = corev1.VolumeMount{Name: volumeCT.Name, MountPath: storage.MountPath}
+	volumeMount = corev1.VolumeMount{Name: volumeCT.ObjectMeta.Name, MountPath: storage.MountPath}
 	resLimits   = map[corev1.ResourceName]resource.Quantity{
 		corev1.ResourceCPU: {},
 	}

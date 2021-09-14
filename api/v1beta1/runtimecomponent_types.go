@@ -152,9 +152,17 @@ type ServiceBindingConsumes struct {
 // RuntimeComponentStorage ...
 type RuntimeComponentStorage struct {
 	// +kubebuilder:validation:Pattern=^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-	Size                string                        `json:"size,omitempty"`
-	MountPath           string                        `json:"mountPath,omitempty"`
-	VolumeClaimTemplate *corev1.PersistentVolumeClaim `json:"volumeClaimTemplate,omitempty"`
+	Size                string                                 `json:"size,omitempty"`
+	MountPath           string                                 `json:"mountPath,omitempty"`
+	VolumeClaimTemplate *RuntimeComponentPersistentVolumeClaim `json:"volumeClaimTemplate,omitempty"`
+}
+
+type RuntimeComponentPersistentVolumeClaim struct {
+	TypeMeta   metav1.TypeMeta                     `json:",inline"`
+	ObjectMeta metav1.ObjectMeta                   `json:"metadata,omitempty"`
+	Name       string                              `json:"name,omitempty"`
+	Spec       *corev1.PersistentVolumeClaimSpec   `json:"spec,omitempty"`
+	Status     *corev1.PersistentVolumeClaimStatus `json:"status,omitempty"`
 }
 
 // RuntimeComponentMonitoring ...
@@ -512,9 +520,32 @@ func (s *RuntimeComponentStorage) GetMountPath() string {
 	return s.MountPath
 }
 
-// GetVolumeClaimTemplate returns a template representing requested persistent volume
-func (s *RuntimeComponentStorage) GetVolumeClaimTemplate() *corev1.PersistentVolumeClaim {
+// GetVolumeClaimTemplate returns volume claim template settings
+func (s *RuntimeComponentStorage) GetVolumeClaimTemplate() common.BaseComponentPersistentVolumeClaim {
+	if s.VolumeClaimTemplate == nil {
+		return nil
+	}
 	return s.VolumeClaimTemplate
+}
+
+// GetPersistentVolumeClaimName returns the name of persistent volume
+func (pv *RuntimeComponentPersistentVolumeClaim) GetPersistentVolumeClaimName() string {
+	return pv.Name
+}
+
+// RuntimeComponentPersistentVolumeClaim returns the metadata of persistent volume
+func (pv *RuntimeComponentPersistentVolumeClaim) GetObjectMeta() metav1.ObjectMeta {
+	return pv.ObjectMeta
+}
+
+// GetPersistentVolumeClaimSpec returns the spec configuration of persistent volume
+func (pv *RuntimeComponentPersistentVolumeClaim) GetPersistentVolumeClaimSpec() *corev1.PersistentVolumeClaimSpec {
+	return pv.Spec
+}
+
+// GetPersistentStatus returns a template representing requested persistent volume
+func (pv *RuntimeComponentPersistentVolumeClaim) GetPersistentStatus() *corev1.PersistentVolumeClaimStatus {
+	return pv.Status
 }
 
 // GetAnnotations returns a set of annotations to be added to the service

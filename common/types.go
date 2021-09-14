@@ -67,11 +67,19 @@ type BaseComponentAutoscaling interface {
 	GetTargetCPUUtilizationPercentage() *int32
 }
 
+// BaseComponentPersistentVolumeClaim represents PVC configuration
+type BaseComponentPersistentVolumeClaim interface {
+	GetPersistentVolumeClaimName() string
+	GetObjectMeta() metav1.ObjectMeta
+	GetPersistentVolumeClaimSpec() *corev1.PersistentVolumeClaimSpec
+	GetPersistentStatus() *corev1.PersistentVolumeClaimStatus
+}
+
 // BaseComponentStorage represents basic PVC configuration
 type BaseComponentStorage interface {
 	GetSize() string
 	GetMountPath() string
-	GetVolumeClaimTemplate() *corev1.PersistentVolumeClaim
+	GetVolumeClaimTemplate() BaseComponentPersistentVolumeClaim
 }
 
 // BaseComponentService represents basic service configuration

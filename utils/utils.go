@@ -523,8 +523,18 @@ func CustomizePersistence(statefulSet *appsv1.StatefulSet, ba common.BaseCompone
 	obj := ba.(metav1.Object)
 	if len(statefulSet.Spec.VolumeClaimTemplates) == 0 {
 		var pvc *corev1.PersistentVolumeClaim
-		if ba.GetStorage().GetVolumeClaimTemplate() != nil {
-			pvc = ba.GetStorage().GetVolumeClaimTemplate()
+		vct := ba.GetStorage().GetVolumeClaimTemplate()
+		l := log.WithValues("vct TEST!!!!!!!", vct)
+		l.Info("")
+		if vct != nil {
+			pvc = &corev1.PersistentVolumeClaim{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      vct.GetPersistentVolumeClaimName(),
+					Namespace: obj.GetNamespace(),
+					Labels:    ba.GetLabels(),
+				},
+				Spec: *vct.GetPersistentVolumeClaimSpec(),
+			}
 		} else {
 			pvc = &corev1.PersistentVolumeClaim{
 				ObjectMeta: metav1.ObjectMeta{
